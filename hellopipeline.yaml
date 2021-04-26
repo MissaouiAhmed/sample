@@ -28,7 +28,7 @@ spec:
       - {name: echo, template: echo}
       - name: train-model
         template: train-model
-        dependencies: [preprocess-data]
+        dependencies: [echo]
         arguments:
           artifacts:
           - {name: preprocess-data-x_train, from: '{{tasks.preprocess-data.outputs.artifacts.preprocess-data-x_train}}'}
