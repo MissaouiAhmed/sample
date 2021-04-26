@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  generateName: my-first-pipeline-
+  generateName: my-first-pipeline
   annotations: {pipelines.kubeflow.org/kfp_sdk_version: 1.1.2,
     pipelines.kubeflow.org/pipeline_spec: '{"description": "A hello world pipeline.",
       "name": "My first pipeline"}'}
