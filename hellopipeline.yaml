@@ -20,4 +20,4 @@ spec:
       - {name: echo, template: echo}
   arguments:
     parameters: []
-  serviceAccountName: pipeline-runner
+
