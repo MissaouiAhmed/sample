@@ -28,4 +28,4 @@ spec:
       - {name: echo, template: echo}
   arguments:
     parameters: []
-  serviceAccountName: "{{workflow.parameters.namespace}}.pipeline-runner"
+  serviceAccountName: "kubeflow.pipeline-runner"
