@@ -2,13 +2,16 @@ apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
   name: "first-pipeline"
-  namespace: kubeflow
+  namespace: ml-test
   annotations: {pipelines.kubeflow.org/kfp_sdk_version: 1.1.2,
     pipelines.kubeflow.org/pipeline_spec: '{"description": "A hello world pipeline.",
       "name": "My first pipeline"}'}
   labels: {pipelines.kubeflow.org/kfp_sdk_version: 1.1.2}
 spec:
   entrypoint: first-pipeline
+  arguments:
+    parameters:
+    - {name: namespace, value: ""}  
   templates:
   - name: echo
     container:
@@ -25,4 +28,4 @@ spec:
       - {name: echo, template: echo}
   arguments:
     parameters: []
-  serviceAccountName: pipeline-runner
+  serviceAccountName: "{{workflow.parameters.namespace}}".pipeline-runner
