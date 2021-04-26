@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
   name: "first-pipeline"
-  namespace: ml-test
+  namespace: kubeflow
   annotations: {pipelines.kubeflow.org/kfp_sdk_version: 1.1.2,
     pipelines.kubeflow.org/pipeline_spec: '{"description": "A hello world pipeline.",
       "name": "My first pipeline"}'}
@@ -26,6 +26,24 @@ spec:
     dag:
       tasks:
       - {name: echo, template: echo}
+      - name: train-model
+        template: train-model
+        dependencies: [preprocess-data]
+        arguments:
+          artifacts:
+          - {name: preprocess-data-x_train, from: '{{tasks.preprocess-data.outputs.artifacts.preprocess-data-x_train}}'}
+          - {name: preprocess-data-y_train, from: '{{tasks.preprocess-data.outputs.artifacts.preprocess-data-y_train}}'}
+  - name: train-model
+    container:
+      args: [--x_train, /tmp/inputs/input-0/data, --y_train, /tmp/inputs/input-1/data]
+      image: gnovack/boston_pipeline_train:latest
+    inputs:
+      artifacts:
+      - {name: preprocess-data-x_train, path: /tmp/inputs/input-0/data}
+      - {name: preprocess-data-y_train, path: /tmp/inputs/input-1/data}
+    outputs:
+      artifacts:
+      - {name: train-model-model, path: /app/model.pkl}
   arguments:
     parameters: []
-  serviceAccountName: pipeline-runner.kubeflow.svc.cluster.local
+  serviceAccountName: pipeline-runner
