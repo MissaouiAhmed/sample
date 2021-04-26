@@ -28,4 +28,4 @@ spec:
       - {name: echo, template: echo}
   arguments:
     parameters: []
-  serviceAccountName: "kubeflow.pipeline-runner"
+  serviceAccountName: pipeline-runner.kubeflow.svc.cluster.local
