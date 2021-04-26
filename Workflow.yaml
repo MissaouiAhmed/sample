@@ -1,16 +1,20 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Workflow                  # new type of k8s spec
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  generateName: hello   # name of the workflow spec
+  name: guestbook-ui
 spec:
-  entrypoint: whalesay          # invoke the whalesay template
-  templates:
-  - name: whalesay              # name of the template
-    container:
-      image: docker/whalesay
-      command: [cowsay]
-      args: ["hello world"]
-      resources:                # limit the resources
-        limits:
-          memory: 32Mi
-          cpu: 100m
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: guestbook-ui
+  template:
+    metadata:
+      labels:
+        app: guestbook-ui
+    spec:
+      containers:
+      - image: gcr.io/heptio-images/ks-guestbook-demo:0.2
+        name: guestbook-ui
+        ports:
+        - containerPort: 80
